@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>TITZ — Claim a Random NFT on Base</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0d10" />
+  <meta name="description" content="Claim a random TITZ NFT on Base. 7,175 supply · 0.0003 ETH · IPFS metadata." />
+  <link rel="preconnect" href="https://ipfs.io" />
+  <link rel="preconnect" href="https://cloudflare-ipfs.com" />
+  <link rel="preconnect" href="https://bafybeib4tdoeyajesmm4mz5ykqhilt7s6g3cl2dsixwjwqds2dvbdjmejy.ipfs.w3s.link" />
+  <style>
+    :root{
+      --bg:#07090c;--fg:#ecf3ff;--mut:#9fb2cc;--card:#0e141c;--line:#1c2635;
+      --pri:#2a87ff;--ok:#16c67a;--warn:#ffb84a;--err:#ff5e5e;--ink:#0b0d10
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;background:radial-gradient(1200px 600px at 10% -10%, #0e1420, #07090c), var(--bg);color:var(--fg);font:15px/1.6 system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial}
+    .wrap{max-width:1200px;margin:24px auto;padding:0 18px}
+    header{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+    .logo{width:56px;height:56px;border-radius:14px;background:#222 url('PLACEHOLDER-LOGO-512x512.png') center/cover no-repeat;border:1px solid var(--line)}
+    .hgroup h1{margin:0;font-size:26px;font-weight:900;letter-spacing:.2px}
+    .hgroup p{margin:2px 0 0;color:var(--mut)}
+    .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+    .card{background:linear-gradient(180deg,#0c1119,#0a0f16);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
+    .hero{height:280px;border-radius:14px;background:#0f141d url('PLACEHOLDER-BANNER-1600x900.jpg') center/cover no-repeat;border:1px solid var(--line)}
+    .muted{color:var(--mut)}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .split{display:flex;justify-content:space-between;align-items:center}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#0c121a;color:#cfe0ff;border:1px solid var(--line)}
+    .pill.good{background:#0f1a14;color:#c7ffe4;border-color:#1f3a2d}
+    .pill.bad{background:#1a1010;color:#ffd1d1;border-color:#3a1f1f}
+    input[type=number], input[type=text]{width:140px;padding:10px;border-radius:12px;border:1px solid var(--line);background:#0f1318;color:var(--fg)}
+    input[type=text]{width:200px}
+    button{cursor:pointer;border:0;padding:12px 16px;border-radius:14px;background:var(--pri);color:#fff;font-weight:800;letter-spacing:.3px}
+    button.secondary{background:#223047;color:#dce8ff}
+    button.ghost{background:transparent;border:1px solid var(--line);color:#cfe0ff}
+    button:disabled{opacity:.5;cursor:not-allowed}
+    .progress{height:10px;background:#101620;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+    .bar{height:100%;background:linear-gradient(90deg,#2a87ff,#16c67a)}
+    .stat{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+    .stat .tile{background:#0a0f16;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+    .stat .tile b{font-size:18px}
+    .log{white-space:pre-wrap;background:#081019;border-radius:12px;padding:12px;margin-top:14px;color:#b9ffd1;min-height:90px;border:1px solid #122}
+    .nft{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:center}
+    .imgbox{width:120px;height:120px;border-radius:12px;background:#0b121a;border:1px dashed #2a3a55;display:flex;align-items:center;justify-content:center;color:#7d9bcf}
+    .imgbox img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+    .sec{margin-top:18px;border-top:1px dashed var(--line);padding-top:14px}
+    .small{font-size:13px}
+
+    /* GALLERY */
+    .gallery{margin-top:22px}
+    .gallery-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .grid2{display:grid;grid-template-columns:repeat(6, 1fr);gap:10px}
+    .tile2{background:#0b121a;border:1px solid var(--line);border-radius:12px;overflow:hidden;position:relative}
+    .tile2 img{width:100%;display:block;aspect-ratio:1/1;object-fit:cover}
+    .tile2 .cap{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.55);padding:4px 8px;border-radius:999px;font-size:12px}
+    .sentinel{height:1px}
+    .hint{color:#87a2d2}
+
+    footer{margin:26px 0 18px;color:#5f769c}
+    a{color:#9bc3ff;text-decoration:none}
+
+    /* Wallet modal */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:999}
+    .sheet{background:#0e141c;border:1px solid var(--line);border-radius:16px;max-width:520px;width:92%;padding:18px}
+    .sheet h3{margin:0 0 10px}
+    .wallets{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .wbtn{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:#0c121a;border:1px solid var(--line);cursor:pointer}
+    .wbtn img{width:20px;height:20px;border-radius:6px}
+    .wbtn.disabled{opacity:.5;cursor:not-allowed}
+    .closex{float:right;cursor:pointer;color:#9bb0cc}
+
+    /* Responsive */
+    @media (max-width:1100px){ .grid{grid-template-columns:1fr} .grid2{grid-template-columns:repeat(4,1fr)} .hero{height:220px} }
+    @media (max-width:720px){ .grid2{grid-template-columns:repeat(2,1fr)} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- HEADER -->
+    <header>
+        <img src="images/logo.png" alt="TITZ Logo" width="128" height="128">
+      <div class="hgroup">
+        <h1>TITZ — Claim a Random TITZ NFT</h1>
+        <p class="muted">7,175 supply • 0.0003 ETH • Chain: Base • Metadata on IPFS • Random allocation</p>
+      </div>
+    </header>
+
+    <!-- TOP GRID -->
+    <div class="grid">
+      <!-- LEFT: hero and live stats -->
+      <div class="card">
+        <img src="images/banner.png" alt="TITZ Banner" width="100%">
+        <p class="muted" style="margin:10px 0 0">
+          TITZ is a cheeky PFP collection that doesn’t take itself too seriously. 7,175 characters stitched together from bold colours, weird assets, and a sense of humour that’s just a bit naughty. Each one is unique, each one has attitude, and together they’re a big, loud middle finger to boring NFT projects. Think playful, think irreverent, think “why not?”. That’s TITZ.
+        </p>
+
+        <div class="sec">
+          <div class="split">
+            <div class="row">
+              <span class="pill" id="network">Network: —</span>
+              <span class="pill" id="sale">Sale: —</span>
+              <span class="pill" id="pricePill">Price: <span id="price">—</span> ETH</span>
+            </div>
+            <div class="pill">Contract <a id="basescan" class="muted" href="#" target="_blank">view</a></div>
+          </div>
+
+          <div class="progress" style="margin-top:10px"><div class="bar" id="bar" style="width:0%"></div></div>
+
+          <div class="stat">
+            <div class="tile">
+              <div class="muted small">Minted</div>
+              <b id="minted">0</b>
+            </div>
+            <div class="tile">
+              <div class="muted small">Remaining</div>
+              <b id="remaining">0</b>
+            </div>
+            <div class="tile">
+              <div class="muted small">Your Address</div>
+              <b id="addr">Not connected</b>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec">
+          <div class="split">
+            <h3 style="margin:0">Recent Mints</h3>
+            <div class="row">
+              <button class="ghost small" id="loadRecent">Load</button>
+              <button class="ghost small" id="clearRecent">Clear</button>
+            </div>
+          </div>
+          <div id="recent" class="muted small" style="margin-top:8px">No events loaded yet.</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: mint panel -->
+      <div class="card">
+        <h3 style="margin:0 0 12px">Claim</h3>
+
+        <div class="row">
+          <button id="openConnect" class="secondary">Connect Wallet</button>
+          <button id="disconnect" class="ghost">Disconnect</button>
+        </div>
+
+        <div class="row" style="margin-top:14px">
+          <label for="qty"><b>Quantity</b></label>
+          <input id="qty" type="number" value="1" min="1" />
+          <button id="mint" disabled>Claim</button>
+        </div>
+
+        <div class="log" id="log">Ready.</div>
+
+        <div class="nft" style="margin-top:12px">
+          <div class="imgbox" id="imgbox">300×300</div>
+          <div>
+            <div id="last">Last minted: —</div>
+            <div id="meta" class="muted">Token metadata appears here after mint.</div>
+          </div>
+        </div>
+
+        <div class="sec small">
+          <div class="row">
+            <b>Preview by ID</b>
+            <input id="previewId" type="number" placeholder="e.g. 6993" />
+            <button id="previewBtn" class="ghost">Preview</button>
+            <span class="hint">Fetches JSON → image from IPFS.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="card gallery">
+      <div class="gallery-head">
+        <h3 style="margin:0">Explore the Collection</h3>
+        <div class="muted small">Images stream from IPFS as you scroll.</div>
+      </div>
+
+      <div id="galleryGrid" class="grid2"></div>
+      <div id="sentinel" class="sentinel"></div>
+      <div id="galleryHint" class="muted small" style="margin-top:8px">Loading…</div>
+    </div>
+
+    <footer class="muted small">
+      © TITZ — Random Mint on Base. Verify on Basescan. IPFS CIDs: metadata <code>bafybeiewgci5...</code>, images <code>bafybeib4tdoeyaj...</code>.
+    </footer>
+  </div>
+
+  <!-- WALLET MODAL -->
+  <div class="modal" id="walletModal">
+    <div class="sheet">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <h3 style="margin:0">Connect Wallet</h3>
+        <span class="closex" id="closeModal">✕</span>
+      </div>
+      <p class="muted small">Pick a wallet below. Injected wallets (MetaMask, Phantom, Coinbase, Rabby, Brave) are supported. WalletConnect QR is available if enabled.</p>
+      <div class="wallets" id="walletList">
+        <!-- buttons injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- libs -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://unpkg.com/@walletconnect/ethereum-provider@2/dist/index.umd.min.js"></script>
+  <!-- app -->
+  <script src="./app.js"></script>
+</body>
+</html>
