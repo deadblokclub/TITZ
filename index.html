@@ -12,62 +12,7 @@
 
   <style>
 
-    /* ====== RESPONSIVE FIXES ====== */
-
-/* Phones */
-@media (max-width: 600px) {
-  .grid { 
-    grid-template-columns: 1fr; 
-  }
-
-  .row { 
-    flex-wrap: wrap; 
-    gap: 6px; 
-  }
-
-  .pill {
-    min-width: auto; 
-    font-size: 14px; 
-    padding: 6px 10px;
-  }
-
-  .stats {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .imgbtn, .qty {
-    min-width: 100px;
-    width: 100%;
-  }
-
-  .socials {
-    justify-content: center;
-    gap: 10px;
-  }
-  .socials a {
-    width: 64px;
-    height: 64px;
-  }
-
-  .galleryViewport {
-    height: 400px; /* smaller scroll on phones */
-  }
-
-  .grid2 { 
-    grid-template-columns: repeat(2, 1fr); 
-  }
-}
-
-/* Tablets */
-@media (max-width: 900px) {
-  .grid { 
-    grid-template-columns: 1fr; 
-  }
-  .grid2 { 
-    grid-template-columns: repeat(3, 1fr); 
-  }
-}
-
+    
     /* ---------- BRAND / BASE ---------- */
     @font-face {
       font-family: "PixelGrunge";
@@ -277,6 +222,68 @@ header.banners{
     .wbtn img{ width:22px; height:22px; border-radius:6px }
     .wbtn.disabled{ opacity:.5; cursor:not-allowed }
     .closex{ float:right; cursor:pointer }
+
+/* ====== RESPONSIVE CLEANUP ====== */
+
+/* Phones */
+@media (max-width: 600px) {
+  header.banners {
+    grid-template-columns: 1fr; /* stack banners */
+    height: auto;
+  }
+  .banner { height: 80px; } /* shrink banner height */
+
+  .grid { 
+    grid-template-columns: 1fr; /* stack left/right */
+  }
+
+  .stats { 
+    grid-template-columns: 1fr 1fr; /* 2 per row */
+  }
+
+  .pill {
+    min-width: auto;
+    font-size: 14px;
+    padding: 6px 10px;
+    text-align: center;
+  }
+
+  .row {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .imgbtn, .qty {
+    width: 100%;
+    min-width: auto;
+    margin-top: 6px;
+  }
+
+  .recent {
+    padding: 10px 14px; /* tighter box */
+  }
+
+  .galleryViewport {
+    height: 360px; /* smaller scroll */
+  }
+  .grid2 {
+    grid-template-columns: repeat(2, 1fr); /* 2-wide grid on phones */
+  }
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  .grid { 
+    grid-template-columns: 1fr; 
+  }
+  .grid2 { 
+    grid-template-columns: repeat(3, 1fr); 
+  }
+}
+
+
+
+
   </style>
 </head>
 <body>
