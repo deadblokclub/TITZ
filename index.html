@@ -2,191 +2,314 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>TITZ — Claim a Random NFT on Base</title>
+  <title>TITZ — Claim on Base</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0b0d10" />
+  <meta name="theme-color" content="#f5bf3c" />
   <meta name="description" content="Claim a random TITZ NFT on Base. 7,175 supply · 0.0003 ETH · IPFS metadata." />
+
   <link rel="preconnect" href="https://ipfs.io" />
   <link rel="preconnect" href="https://cloudflare-ipfs.com" />
-  <link rel="preconnect" href="https://bafybeib4tdoeyajesmm4mz5ykqhilt7s6g3cl2dsixwjwqds2dvbdjmejy.ipfs.w3s.link" />
+
   <style>
-    :root{
-      --bg:#07090c;--fg:#ecf3ff;--mut:#9fb2cc;--card:#0e141c;--line:#1c2635;
-      --pri:#2a87ff;--ok:#16c67a;--warn:#ffb84a;--err:#ff5e5e;--ink:#0b0d10
+    /* ---------- BRAND / BASE ---------- */
+    @font-face {
+      font-family: "PixelGrunge";
+      src: url("./assets/PIXELGRUNGE.TTF") format("truetype");
+      font-display: swap;
     }
-    *{box-sizing:border-box} html,body{height:100%}
-    body{margin:0;background:radial-gradient(1200px 600px at 10% -10%, #0e1420, #07090c), var(--bg);color:var(--fg);font:15px/1.6 system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial}
-    .wrap{max-width:1200px;margin:24px auto;padding:0 18px}
-    header{display:flex;gap:14px;align-items:center;margin-bottom:16px}
-    .logo{width:56px;height:56px;border-radius:14px;background:#222 url('PLACEHOLDER-LOGO-512x512.png') center/cover no-repeat;border:1px solid var(--line)}
-    .hgroup h1{margin:0;font-size:26px;font-weight:900;letter-spacing:.2px}
-    .hgroup p{margin:2px 0 0;color:var(--mut)}
-    .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
-    .card{background:linear-gradient(180deg,#0c1119,#0a0f16);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
-    .hero{height:280px;border-radius:14px;background:#0f141d url('PLACEHOLDER-BANNER-1600x900.jpg') center/cover no-repeat;border:1px solid var(--line)}
-    .muted{color:var(--mut)}
-    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .split{display:flex;justify-content:space-between;align-items:center}
-    .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#0c121a;color:#cfe0ff;border:1px solid var(--line)}
-    .pill.good{background:#0f1a14;color:#c7ffe4;border-color:#1f3a2d}
-    .pill.bad{background:#1a1010;color:#ffd1d1;border-color:#3a1f1f}
-    input[type=number], input[type=text]{width:140px;padding:10px;border-radius:12px;border:1px solid var(--line);background:#0f1318;color:var(--fg)}
-    input[type=text]{width:200px}
-    button{cursor:pointer;border:0;padding:12px 16px;border-radius:14px;background:var(--pri);color:#fff;font-weight:800;letter-spacing:.3px}
-    button.secondary{background:#223047;color:#dce8ff}
-    button.ghost{background:transparent;border:1px solid var(--line);color:#cfe0ff}
-    button:disabled{opacity:.5;cursor:not-allowed}
-    .progress{height:10px;background:#101620;border:1px solid var(--line);border-radius:999px;overflow:hidden}
-    .bar{height:100%;background:linear-gradient(90deg,#2a87ff,#16c67a)}
-    .stat{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
-    .stat .tile{background:#0a0f16;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
-    .stat .tile b{font-size:18px}
-    .log{white-space:pre-wrap;background:#081019;border-radius:12px;padding:12px;margin-top:14px;color:#b9ffd1;min-height:90px;border:1px solid #122}
-    .nft{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:center}
-    .imgbox{width:120px;height:120px;border-radius:12px;background:#0b121a;border:1px dashed #2a3a55;display:flex;align-items:center;justify-content:center;color:#7d9bcf}
-    .imgbox img{width:100%;height:100%;object-fit:cover;border-radius:12px}
-    .sec{margin-top:18px;border-top:1px dashed var(--line);padding-top:14px}
-    .small{font-size:13px}
+    :root{
+      --bg: #f5bf3c;        /* site background */
+      --accent: #f71bb9;    /* magenta accent */
+      --ink: #0b0d10;       /* dark text */
+      --mut: #273043;       /* muted text */
 
-    /* GALLERY */
-    .gallery{margin-top:22px}
-    .gallery-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .grid2{display:grid;grid-template-columns:repeat(6, 1fr);gap:10px}
-    .tile2{background:#0b121a;border:1px solid var(--line);border-radius:12px;overflow:hidden;position:relative}
-    .tile2 img{width:100%;display:block;aspect-ratio:1/1;object-fit:cover}
-    .tile2 .cap{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.55);padding:4px 8px;border-radius:999px;font-size:12px}
-    .sentinel{height:1px}
-    .hint{color:#87a2d2}
+       /* 👉 NEW: global padding knobs */
+  --frame-pad: 52px;  /* was 24px on .panel — increase if text touches frame */
+  --box-pad: 14px;    /* inner padding for small boxes */
+    }
+    *{ box-sizing: border-box }
+    html, body{ height:100% }
+body{
+  margin:0;
+  background: var(--bg);
+  color: var(--ink);
+  /* 👉 make PixelGrunge the default everywhere */
+  font: 15px/1.55 "PixelGrunge", system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;  /* good for your art */
+}
 
-    footer{margin:26px 0 18px;color:#5f769c}
-    a{color:#9bc3ff;text-decoration:none}
+/* 👉 make form controls & code inherit the same font */
+button, input, select, textarea, code, pre, kbd, samp {
+  font-family: inherit !important;
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
 
-    /* Wallet modal */
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:999}
-    .sheet{background:#0e141c;border:1px solid var(--line);border-radius:16px;max-width:520px;width:92%;padding:18px}
-    .sheet h3{margin:0 0 10px}
-    .wallets{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .wbtn{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:#0c121a;border:1px solid var(--line);cursor:pointer}
-    .wbtn img{width:20px;height:20px;border-radius:6px}
-    .wbtn.disabled{opacity:.5;cursor:not-allowed}
-    .closex{float:right;cursor:pointer;color:#9bb0cc}
+    .wrap{ max-width:1200px; margin:20px auto; padding:0 14px }
 
-    /* Responsive */
-    @media (max-width:1100px){ .grid{grid-template-columns:1fr} .grid2{grid-template-columns:repeat(4,1fr)} .hero{height:220px} }
-    @media (max-width:720px){ .grid2{grid-template-columns:repeat(2,1fr)} }
+/* ---------- HEADER BANNERS ---------- */
+header.banners{
+  display:grid; 
+  grid-template-columns:1fr 1fr; 
+  gap:12px; 
+  margin-bottom:14px;
+}
+.banner{
+  width:100%; 
+  height:110px; 
+  display:block; 
+  border-radius:8px;
+}
+.banner-left{
+  background:url("./assets/gyTITZo-banner.png") center/cover no-repeat;
+}
+.banner-right{
+  background:url("./assets/base-opensea.png") center/cover no-repeat;
+}
+
+
+    /* ---------- PANELS USING YOUR ART BOXES ---------- */
+.panel{
+  background: url("./assets/background-box.png") center/100% 100% no-repeat;
+  padding: var(--frame-pad);    /* <-- use global frame padding */
+  border-radius:8px; margin-bottom:16px;
+}
+
+    .grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:16px }
+    @media (max-width:980px){ .grid{ grid-template-columns:1fr } }
+
+    .title{ font-family:PixelGrunge, system-ui; font-size:22px; margin:0 0 8px }
+    .muted{ color: var(--mut) }
+
+    /* ---------- BUTTONS & INPUTS (IMAGE BACKED) ---------- */
+    .imgbtn{
+      display:inline-flex; align-items:center; justify-content:center;
+      height:48px; min-width:160px; padding:0 18px;
+      color:#fff; font-weight:800; letter-spacing:.3px; text-shadow:0 1px 0 rgba(0,0,0,.35);
+      background:url("./assets/claim-box.png") center/100% 100% no-repeat;
+      border:0; cursor:pointer; user-select:none;
+    }
+    .imgbtn.wallet{ background-image:url("./assets/connect-disconnect-wallet.png"); min-width:190px }
+    .imgbtn:disabled{ opacity:.6; cursor:not-allowed }
+
+    .qty{
+      width:150px; height:48px; padding:10px 14px; border:0; outline:0;
+      color:var(--ink); font-weight:800;
+      background:url("./assets/quantity-box.png") center/100% 100% no-repeat;
+    }
+
+    .imgbtn{
+  display:inline-flex; align-items:center; justify-content:center;
+  height:48px; min-width:160px; padding:0 18px;
+  color:#fff; font-weight:800; letter-spacing:.3px; text-shadow:0 1px 0 rgba(0,0,0,.35);
+  background:url("./assets/claim-box.png") center/100% 100% no-repeat;
+  border:0; cursor:pointer; user-select:none;
+  font-family: inherit;            /* 👈 this line */
+}
+.qty{
+  width:150px; height:48px; padding:10px 14px; border:0; outline:0;
+  color:var(--ink); font-weight:800;
+  background:url("./assets/quantity-box.png") center/100% 100% no-repeat;
+  font-family: inherit;            /* 👈 this line */
+}
+
+
+    /* ---------- LEFT: hero + stats ---------- */
+    .hero{ width:100%; border-radius:8px; display:block }
+    .row{ display:flex; gap:10px; align-items:center; flex-wrap:nowrap }
+
+.pill{
+  display:inline-flex; align-items:center; justify-content:center; /* center text */
+  padding:8px 12px; border-radius:999px; background:#fff5; border:2px solid #0008;
+  font-weight:800;
+  min-width:140px;          /* 👈 lock consistent width */
+  white-space:nowrap;       /* 👈 prevent line breaks */
+
+#network     { min-width:130px; }
+#sale        { min-width:110px; }
+#pricePill   { min-width:160px; }
+#contractPill{ min-width:150px; }
+
+}
+
+
+    .stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:12px }
+.tile{
+  background:url("./assets/generic-box.png") center/100% 100% no-repeat;
+  height:84px; border-radius:8px; padding: var(--box-pad); text-align:center; /* <-- knob */
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+
+    .tile b{ font-size:20px; font-family:PixelGrunge, system-ui }
+
+    /* ---------- LOG / RECENT MINTS ---------- */
+    .log{ background:#0004; color:#061; border:2px solid #000; border-radius:8px;
+          min-height:76px; white-space:pre-wrap; padding:10px; }
+    .recent{
+      background:url("./assets/last-minted.png") center/100% 100% no-repeat;
+      min-height:120px; border-radius:8px; padding:14px 36px;
+    }
+    .recent a{ color:#0b4aa8; text-decoration:none }
+    .recent .item + .item{ margin-top:6px }
+
+/* ---------- SOCIAL ICONS (bottom-right of claim panel) ---------- */
+.socials{
+  display:flex;
+  justify-content:flex-end;  /* push to the right */
+  align-items:center;
+  gap:14px;                  /* space between icons */
+  margin-top:12px;           /* space above the icons */
+  padding-right:6px;         /* tiny nudge from the frame edge */
+}
+.socials a{
+  display:inline-flex;
+  width:130px;                /* change this to make icons bigger/smaller */
+  height:130px;
+}
+.socials img{
+  width:100%;
+  height:100%;
+  image-rendering: pixelated;   /* crisp pixel style */
+}
+.socials a:hover img{
+  filter: brightness(1.1);
+}
+
+
+
+
+
+
+
+    /* ---------- GALLERY (inside a fixed-height scroll area) ---------- */
+.gallery-panel{
+  background:url("./assets/background-box.png") center/100% 100% no-repeat;
+  border-radius:8px; padding: var(--frame-pad);               /* <-- knob */
+}
+    .galleryViewport{
+  height:560px; overflow:auto; border-radius:8px; padding: 10px; /* a bit more room */
+}
+    .grid2{ display:grid; grid-template-columns:repeat(6,1fr); gap:10px }
+    @media (max-width:1100px){ .grid2{ grid-template-columns:repeat(4,1fr) } }
+    @media (max-width:700px){ .grid2{ grid-template-columns:repeat(2,1fr) } }
+
+    .tile2{
+  background:url("./assets/generic-box.png") center/100% 100% no-repeat;
+  border-radius:8px; overflow:hidden; position:relative; padding: var(--box-pad); /* <-- knob */
+}
+.tile2 img{ width:100%; display:block; aspect-ratio:1/1; object-fit:cover; border-radius:4px; }
+    .tile2 .cap{
+      position:absolute; left:8px; bottom:8px; font-family:PixelGrunge, system-ui;
+      background:#0008; color:#fff; padding:2px 8px; border-radius:6px; font-size:12px;
+    }
+
+    /* ---------- MODAL (wallet list) ---------- */
+    .modal{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:none;
+            align-items:center; justify-content:center; z-index:999 }
+    .sheet{ width:min(520px, 92%); background:#222; color:#fff; padding:16px; border-radius:10px; border:2px solid #000 }
+    .wallets{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
+    .wbtn{ display:flex; gap:10px; align-items:center; padding:10px; background:#333; border:2px solid #000; border-radius:8px; cursor:pointer }
+    .wbtn img{ width:22px; height:22px; border-radius:6px }
+    .wbtn.disabled{ opacity:.5; cursor:not-allowed }
+    .closex{ float:right; cursor:pointer }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <!-- HEADER -->
-    <header>
-        <img src="images/logo.png" alt="TITZ Logo" width="128" height="128">
-      <div class="hgroup">
-        <h1>TITZ — Claim a Random TITZ NFT</h1>
-        <p class="muted">7,175 supply • 0.0003 ETH • Chain: Base • Metadata on IPFS • Random allocation</p>
-      </div>
-    </header>
 
-    <!-- TOP GRID -->
-    <div class="grid">
-      <!-- LEFT: hero and live stats -->
-      <div class="card">
-        <img src="images/banner.png" alt="TITZ Banner" width="100%">
-        <p class="muted" style="margin:10px 0 0">
-          TITZ is a cheeky PFP collection that doesn’t take itself too seriously. 7,175 characters stitched together from bold colours, weird assets, and a sense of humour that’s just a bit naughty. Each one is unique, each one has attitude, and together they’re a big, loud middle finger to boring NFT projects. Think playful, think irreverent, think “why not?”. That’s TITZ.
-        </p>
+    <!-- TOP BANNERS -->
+<header class="banners">
+  <div class="banner banner-left" aria-label="TITZ banner"></div>
+  <div class="banner banner-right" aria-label="OpenSea banner"></div>
+</header>
 
-        <div class="sec">
-          <div class="split">
-            <div class="row">
-              <span class="pill" id="network">Network: —</span>
-              <span class="pill" id="sale">Sale: —</span>
-              <span class="pill" id="pricePill">Price: <span id="price">—</span> ETH</span>
-            </div>
-            <div class="pill">Contract <a id="basescan" class="muted" href="#" target="_blank">view</a></div>
-          </div>
 
-          <div class="progress" style="margin-top:10px"><div class="bar" id="bar" style="width:0%"></div></div>
+    <!-- TOP PANEL (your big magenta/yellow frame) -->
+    <section class="panel">
+      <div class="grid">
+        <!-- LEFT SIDE -->
+        <div>
+         
+          <p class="muted" style="margin:10px 0 0; font-size:20px">
+            TITZ is a cheeky PFP collection that doesn’t take itself too seriously. 7,175 characters
+            stitched from bold colours, weird assets, and a sense of humour that’s a bit naughty.
+          </p>
 
-          <div class="stat">
+<div class="row" style="margin-top:12px">
+  <span class="pill" id="network">Network: —</span>
+  <span class="pill" id="sale">Sale: —</span>
+  <span class="pill" id="pricePill">Price: <b style="margin-left:6px" id="price">—</b> ETH</span>
+  <span class="pill" id="contractPill">Contract <a id="basescan" href="#" target="_blank" style="margin-left:6px">view</a></span>
+</div>
+
+
+          <div class="stats">
             <div class="tile">
-              <div class="muted small">Minted</div>
+              <div class="muted">Minted</div>
               <b id="minted">0</b>
             </div>
             <div class="tile">
-              <div class="muted small">Remaining</div>
+              <div class="muted">Remaining</div>
               <b id="remaining">0</b>
             </div>
             <div class="tile">
-              <div class="muted small">Your Address</div>
+              <div class="muted">Your Address</div>
               <b id="addr">Not connected</b>
             </div>
           </div>
-        </div>
 
-        <div class="sec">
-          <div class="split">
-            <h3 style="margin:0">Recent Mints</h3>
-            <div class="row">
-              <button class="ghost small" id="loadRecent">Load</button>
-              <button class="ghost small" id="clearRecent">Clear</button>
-            </div>
-          </div>
-          <div id="recent" class="muted small" style="margin-top:8px">No events loaded yet.</div>
-        </div>
-      </div>
-
-      <!-- RIGHT: mint panel -->
-      <div class="card">
-        <h3 style="margin:0 0 12px">Claim</h3>
-
-        <div class="row">
-          <button id="openConnect" class="secondary">Connect Wallet</button>
-          <button id="disconnect" class="ghost">Disconnect</button>
-        </div>
-
-        <div class="row" style="margin-top:14px">
-          <label for="qty"><b>Quantity</b></label>
-          <input id="qty" type="number" value="1" min="1" />
-          <button id="mint" disabled>Claim</button>
-        </div>
-
-        <div class="log" id="log">Ready.</div>
-
-        <div class="nft" style="margin-top:12px">
-          <div class="imgbox" id="imgbox">300×300</div>
-          <div>
-            <div id="last">Last minted: —</div>
-            <div id="meta" class="muted">Token metadata appears here after mint.</div>
+          <div class="recent" style="margin-top:14px">
+            <div class="title">Recent Mints</div>
+            <div id="recentList" class="muted" style="margin-top:6px">Loading…</div>
           </div>
         </div>
 
-        <div class="sec small">
-          <div class="row">
-            <b>Preview by ID</b>
-            <input id="previewId" type="number" placeholder="e.g. 6993" />
-            <button id="previewBtn" class="ghost">Preview</button>
-            <span class="hint">Fetches JSON → image from IPFS.</span>
+        <!-- RIGHT SIDE: CLAIM -->
+        <div>
+          <h3 class="title">CLAIM A RANDOM TITZ NFT!</h3>
+
+          <div class="row" style="margin:10px 0">
+            <button id="openConnect" class="imgbtn wallet" title="Connect wallet">Connect Wallet</button>
+            <button id="disconnect" class="imgbtn wallet" title="Disconnect wallet">Disconnect</button>
           </div>
+
+          <div class="row" style="margin:8px 0">
+            <input id="qty" class="qty" type="number" min="1" value="1" />
+            <button id="mint" class="imgbtn" disabled>Claim</button>
+          </div>
+
+          <div id="log" class="log">Ready.</div>
+
+<!-- Social icons row -->
+<div class="socials">
+  <a href="https://x.com/titznft" target="_blank" rel="noopener" aria-label="TITZ on X">
+    <img src="./assets/x-icon.png" alt="X">
+  </a>
+  <a href="https://t.me/your_telegram_here" target="_blank" rel="noopener" aria-label="TITZ on Telegram">
+    <img src="./assets/telegram-icon.png" alt="Telegram">
+  </a>
+  <a href="https://opensea.io/collection/titz-274086807" target="_blank" rel="noopener" aria-label="TITZ on OpenSea">
+    <img src="./assets/opensea-icon.png" alt="OpenSea">
+  </a>
+</div>
+
+
+
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- GALLERY -->
-    <div class="card gallery">
-      <div class="gallery-head">
-        <h3 style="margin:0">Explore the Collection</h3>
-        <div class="muted small">Images stream from IPFS as you scroll.</div>
+    <!-- BOTTOM PANEL: COLLECTION (SCROLLS INSIDE THE FRAME) -->
+    <section class="gallery-panel">
+      <div class="title" style="margin-bottom:8px">Explore the Collection</div>
+      <div id="galleryViewport" class="galleryViewport">
+        <div id="galleryGrid" class="grid2"></div>
+        <div id="gallerySentinel" style="height:1px"></div>
       </div>
-
-      <div id="galleryGrid" class="grid2"></div>
-      <div id="sentinel" class="sentinel"></div>
-      <div id="galleryHint" class="muted small" style="margin-top:8px">Loading…</div>
-    </div>
-
-    <footer class="muted small">
-      © TITZ — Random Mint on Base. Verify on Basescan. IPFS CIDs: metadata <code>bafybeiewgci5...</code>, images <code>bafybeib4tdoeyaj...</code>.
-    </footer>
+    </section>
   </div>
 
   <!-- WALLET MODAL -->
@@ -196,16 +319,15 @@
         <h3 style="margin:0">Connect Wallet</h3>
         <span class="closex" id="closeModal">✕</span>
       </div>
-      <p class="muted small">Pick a wallet below. Injected wallets (MetaMask, Phantom, Coinbase, Rabby, Brave) are supported. WalletConnect QR is available if enabled.</p>
-      <div class="wallets" id="walletList">
-        <!-- buttons injected by JS -->
-      </div>
+      <p class="muted">Injected wallets (MetaMask, Phantom, Coinbase, Rabby, Brave) + WalletConnect.</p>
+      <div class="wallets" id="walletList"></div>
     </div>
   </div>
 
   <!-- libs -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://unpkg.com/@walletconnect/ethereum-provider@2/dist/index.umd.min.js"></script>
+
   <!-- app -->
   <script src="./app.js"></script>
 </body>
