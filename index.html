@@ -81,7 +81,7 @@ header.banners{
     .grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:16px }
     @media (max-width:980px){ .grid{ grid-template-columns:1fr } }
 
-    .title{ font-family:PixelGrunge, system-ui; font-size:22px; margin:0 0 8px }
+    .title{ font-family:PixelGrunge, system-ui; font-size:20px; margin:0 0 8px }
     .muted{ color: var(--mut) }
 
     /* ---------- BUTTONS & INPUTS (IMAGE BACKED) ---------- */
@@ -189,6 +189,11 @@ header.banners{
   background:url("./assets/background-box.png") center/100% 100% no-repeat;
   border-radius:8px; padding: var(--frame-pad);               /* <-- knob */
 }
+
+.gallery-panel .title {
+  font-size: 42px;  /* change size as you like */
+}
+
     .galleryViewport{
   height:560px; overflow:auto; border-radius:8px; padding: 10px; /* a bit more room */
 }
