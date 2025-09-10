@@ -25,13 +25,13 @@ const BATCH_SIZE  = 60;       // tiles per gallery batch
 // ====== On-chain / ABI ======
 const ABI = [
   "function mint(uint256 quantity) payable",
-  "function claim(uint256 quantity) payable",
   "function saleActive() view returns (bool)",
   "function totalMinted() view returns (uint256)",
   "function remaining() view returns (uint256)",
   "function price() view returns (uint256)",
   "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
 ];
+
 
 
 const BASE = {
@@ -246,45 +246,72 @@ async function doMint(){
 }
 
 
-// ====== Recent mints (auto on load) ======
-const ZERO_TOPIC = ethers.utils.hexZeroPad(ethers.constants.AddressZero, 32);
-const TRANSFER_SIG = ethers.utils.id("Transfer(address,address,uint256)");
-
+// ====== Recent Mints (Alchemy v2 RPC) ======
 async function loadRecent(n = 5){
   try{
-    const rp   = provider || new ethers.providers.JsonRpcProvider(RPCS[0]);
-    const read = new ethers.Contract(CONTRACT_ADDRESS, ABI, rp);
+    const url = `https://base-mainnet.g.alchemy.com/v2/gx1FJPkbagtcOFiznk_FI`;
+    const body = {
+      id: 1,
+      jsonrpc: "2.0",
+      method: "alchemy_getAssetTransfers",
+      params: [{
+        fromBlock: "0x0",
+        toBlock: "latest",
+        category: ["erc721"],
+        contractAddresses: [CONTRACT_ADDRESS],
+        order: "desc",
+        withMetadata: false
+      }]
+    };
 
-    const latest  = await rp.getBlockNumber();
-    const windows = [120_000, 600_000, 2_000_000, latest]; // progressively larger lookbacks
+    console.log("Fetching recent mints via alchemy_getAssetTransfers:", body);
 
-    let events = [];
-    for (const w of windows){
-      const from = Math.max(0, latest - w);
-      const filter = read.filters.Transfer(ethers.constants.AddressZero, null);
-      events = await read.queryFilter(filter, from, "latest");
-      if (events.length >= n) break;
-    }
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "accept": "application/json",
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
 
-    if (!events.length){
-      $("recentList").textContent = "No mint events found.";
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+
+    console.log("Alchemy response:", data);
+
+    const txs = (data.result?.transfers || []).filter(
+      t => t.from?.toLowerCase() === "0x0000000000000000000000000000000000000000"
+    );
+
+    if (!txs.length){
+      $("recentList").textContent = "No mints found (yet).";
       return;
     }
 
-    const items = events.slice(-n).reverse().map(ev => {
-      const id  = ev.args.tokenId.toNumber();
-      const to  = ev.args.to;
+    const items = txs.slice(0, n).map(ev => {
+      const id  = parseInt(ev.tokenId, 16); // tokenId is hex
+      const to  = ev.to;
       const adr = `${to.slice(0,6)}…${to.slice(-4)}`;
-      const tx  = `${BASE.explorer}/tx/${ev.transactionHash}`;
+      const tx  = `${BASE.explorer}/tx/${ev.hash}`;
       return `<div class="item">• <b>#${id}</b> → <code>${adr}</code> — <a href="${tx}" target="_blank">tx</a></div>`;
     }).join("");
 
     $("recentList").innerHTML = items;
   }catch(e){
-    console.warn("loadRecent()", e);
-    $("recentList").textContent = "Load failed. Try again later.";
+    console.warn("loadRecent() error:", e);
+    $("recentList").textContent = "Could not load events.";
   }
 }
+
+
+
+
+
+
+
+
+
 
 
 // ====== Gallery (scrolls inside the bottom frame) ======
