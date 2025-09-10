@@ -11,6 +11,63 @@
   <link rel="preconnect" href="https://cloudflare-ipfs.com" />
 
   <style>
+
+    /* ====== RESPONSIVE FIXES ====== */
+
+/* Phones */
+@media (max-width: 600px) {
+  .grid { 
+    grid-template-columns: 1fr; 
+  }
+
+  .row { 
+    flex-wrap: wrap; 
+    gap: 6px; 
+  }
+
+  .pill {
+    min-width: auto; 
+    font-size: 14px; 
+    padding: 6px 10px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .imgbtn, .qty {
+    min-width: 100px;
+    width: 100%;
+  }
+
+  .socials {
+    justify-content: center;
+    gap: 10px;
+  }
+  .socials a {
+    width: 64px;
+    height: 64px;
+  }
+
+  .galleryViewport {
+    height: 400px; /* smaller scroll on phones */
+  }
+
+  .grid2 { 
+    grid-template-columns: repeat(2, 1fr); 
+  }
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  .grid { 
+    grid-template-columns: 1fr; 
+  }
+  .grid2 { 
+    grid-template-columns: repeat(3, 1fr); 
+  }
+}
+
     /* ---------- BRAND / BASE ---------- */
     @font-face {
       font-family: "PixelGrunge";
