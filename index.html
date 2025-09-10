@@ -254,17 +254,6 @@ header.banners{
     margin: 6px 0 !important;
   }
 
-  /* Social icons smaller */
-  .socials {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .socials a {
-    width: 56px;
-    height: 56px;
-  }
-
   /* Gallery smaller grid */
   .grid2 {
     grid-template-columns: repeat(2, 1fr) !important;
@@ -273,6 +262,37 @@ header.banners{
   /* Prevent sideways scroll */
   body, html {
     overflow-x: hidden !important;
+  }
+
+  /* ---------- NEW FIXES ---------- */
+
+  /* Stack banners vertically */
+  header.banners {
+    grid-template-columns: 1fr !important;
+    gap: 10px;
+  }
+  .banner {
+    height: 90px;
+  }
+
+  /* Push text down more */
+  .panel p.muted {
+    margin-top: 20px !important;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  /* Social icons smaller + centered */
+  .socials {
+    justify-content: center;
+    margin-top: 20px !important;
+    padding: 0 !important;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .socials a {
+    width: 56px;
+    height: 56px;
   }
 }
 
