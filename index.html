@@ -223,67 +223,64 @@ header.banners{
     .wbtn.disabled{ opacity:.5; cursor:not-allowed }
     .closex{ float:right; cursor:pointer }
 
-/* ====== RESPONSIVE CLEANUP ====== */
-
-/* Phones */
+/* ====== MOBILE FIXES ====== */
 @media (max-width: 600px) {
-  header.banners {
-    grid-template-columns: 1fr; /* stack banners */
-    height: auto;
-  }
-  .banner { height: 80px; } /* shrink banner height */
 
-  .grid { 
-    grid-template-columns: 1fr; /* stack left/right */
-  }
-
-  .stats { 
-    grid-template-columns: 1fr 1fr; /* 2 per row */
-  }
-
-  .pill {
-    min-width: auto;
-    font-size: 14px;
-    padding: 6px 10px;
-    text-align: center;
+  /* Text shrink + wrap */
+  .panel p,
+  .title,
+  .pill,
+  .recent,
+  .stats,
+  .socials {
+    font-size: 14px !important;
+    line-height: 1.3;
+    word-wrap: break-word;
   }
 
-  .row {
-    flex-wrap: wrap;
-    justify-content: center;
+  /* Pixel frame backgrounds scale */
+  .panel,
+  .recent,
+  .gallery-panel {
+    background-size: 100% 100%;  /* stretch frame to fit */
   }
 
+  /* Buttons + inputs full width */
   .imgbtn, .qty {
-    width: 100%;
+    width: 100% !important;
     min-width: auto;
-    margin-top: 6px;
+    margin: 6px 0;
   }
 
-  .recent {
-    padding: 10px 14px; /* tighter box */
+  /* Social icons shrink */
+  .socials a {
+    width: 64px;
+    height: 64px;
   }
 
-  .galleryViewport {
-    height: 360px; /* smaller scroll */
+  /* Grid tweaks */
+  .stats {
+    grid-template-columns: 1fr 1fr;
   }
   .grid2 {
-    grid-template-columns: repeat(2, 1fr); /* 2-wide grid on phones */
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Gallery viewport smaller */
+  .galleryViewport {
+    height: 300px;
   }
 }
 
 /* Tablets */
 @media (max-width: 900px) {
-  .grid { 
-    grid-template-columns: 1fr; 
-  }
-  .grid2 { 
-    grid-template-columns: repeat(3, 1fr); 
-  }
+  .grid { grid-template-columns: 1fr; }
+  .grid2 { grid-template-columns: repeat(3, 1fr); }
 }
 
 
 
-
+    
   </style>
 </head>
 <body>
