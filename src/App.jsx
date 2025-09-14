@@ -536,6 +536,54 @@ TITZ is a cheeky PFP collection that doesn't take itself too seriously. 7,175 ch
           </div>
         </section>
 
+
+                {/* MIDDLE PANEL: HOW IT WORKS + ROADMAP */}
+        <section className="panel">
+          <div className="grid">
+            <div>
+              <h3 
+                className="title" 
+                style={{ 
+                  fontSize: '28px',
+                  borderBottom: '5px solid #f71bb9',
+                  display: 'inline-block',
+                  lineHeight: '1.1',
+                  paddingBottom: '0'
+                }}
+              >
+                How It Works
+              </h3>
+              <ul style={{ marginTop: '10px', fontSize: '18px', lineHeight: '1.5' }}>
+                <li>✅ Connect your wallet</li>
+                <li>✅ Click Claim</li>
+                <li>✅ Get a random TITZ</li>
+                <li>✅ It’s yours forever</li>
+              </ul>
+            </div>
+            <div>
+              <h3 
+                className="title" 
+                style={{ 
+                  fontSize: '28px',
+                  borderBottom: '5px solid #f71bb9',
+                  display: 'inline-block',
+                  lineHeight: '1.1',
+                  paddingBottom: '0'
+                }}
+              >
+                Roadmap
+              </h3>
+              <ul style={{ marginTop: '10px', fontSize: '18px', lineHeight: '1.5' }}>
+                <li>🚀 Launch TITZ mint</li>
+                <li>🎨 Grow the community</li>
+                <li>🤝 Collabs & weirdness</li>
+                <li>👀 More surprises ahead</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+
         {/* GALLERY PANEL */}
         <section className="gallery-panel">
 <div 

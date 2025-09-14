@@ -536,4 +536,19 @@ header.banners {
   .recent {
     padding: 12px 20px;
   }
+
+.panel ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.panel ul li {
+  margin-bottom: 6px;
+  font-family: PixelGrunge, system-ui;
+}
+
+
+
+
 }
