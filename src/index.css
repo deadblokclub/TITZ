@@ -1,0 +1,61 @@
+/* ---------- BRAND / BASE ---------- */
+:root {
+  --bg: #f5bf3c;        /* site background */
+  --accent: #f71bb9;    /* magenta accent */
+  --ink: #0b0d10;       /* dark text */
+  --mut: #273043;       /* muted text */
+  --frame-pad: 52px;    /* frame padding */
+  --box-pad: 14px;      /* inner padding for small boxes */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.55 "PixelGrunge", system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Make form controls & code inherit the same font */
+button, input, select, textarea, code, pre, kbd, samp {
+  font-family: inherit !important;
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
